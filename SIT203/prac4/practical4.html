@@ -1,0 +1,259 @@
+<!doctype html>
+<html>
+<head><!-- Google Tag Manager --><script>window.dataLayer = window.dataLayer || [];window.dataLayer.push({'cmsType' : 'D2L'});</script><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N3CB');</script><!-- End Google Tag Manager -->
+	<meta charset="utf-8">
+      <title>Ajax Enabled Form</title>
+
+      <script type = "text/javascript" language = "Javascript">
+         
+         // validates if the input is empty and displays the error message
+         function validateNotEmpty( input, id )
+         {
+            var errorDisplay =  document.getElementById( id );
+            var notEmpty;
+            if ( input == "" ) // check if input is empty
+            {
+               errorDisplay.innerHTML = "This is a requiered field";
+               notEmpty = false; // update return value
+            } // end if
+            else
+            {
+               errorDisplay.innerHTML = ""; // clear the error area
+               notEmpty = true; // update return value
+            } // end else
+
+            return notEmpty; // return whether the input is empty
+
+         }// end function validateNotEmpty
+
+
+         // validate that  the email has corect format and is allowed 
+         function validateEmail( input )
+         {
+            if( validateNotEmpty( input, 'emailEmptyError' ) )
+            {
+               if ( validateEmailFormat( input ) ) // if correct format
+               {
+                  // send the request for a list of emails that are not
+                  // allowed ot post
+                  try
+                  {
+                     asyncRequest = new XMLHttpRequest();
+
+                     // register event handler
+                     asyncRequest.onreadystatechange = function()
+                     {
+                        checkIfAllowed( input ); 
+                     }; 
+                     asyncRequest.open( 'GET', 'emails.xml', true ); 
+                     asyncRequest.send( null ); 
+                  } // end try
+                  catch ( exception )
+                  {
+                     alert( 'Request Failed' );
+                  } // end catch
+
+               } // end if
+
+            } // end if
+
+         } // end function validateEmail
+
+
+         // validate that the email has correct format
+         function validateEmailFormat( input )
+         {
+            var valid = false; // tracks validity of the e-mail address
+            var section = 'user'; // tracks the section of the address
+            for( var i = 0; i < input.length && !valid; i++ )
+            {
+               // if we reach an "@" the user section is over
+               
+               if( section == "user" && input.charAt( i )  == '@' )
+               {
+                  section = "domain"; // update section variable
+               } //  end if
+
+               // if we reach a "." the domain section is over 
+               else if ( section == "domain" && input.charAt( i ) == '.' )
+               {
+                  // if there is something after the "." the email has 
+                  // valid format
+                  if ( i != input.length - 1 )
+                  {
+                     valid = true; // update validity
+                  } //  end if
+
+               } // end else if
+
+            } // end for
+
+            var errorDisplay = 
+               document.getElementById( 'emailFormatError' );
+            
+            // display error if email does not have valid format
+            if ( !valid )
+            {
+               errorDisplay.innerHTML = "E-mail has incorrect format";
+            } // end if
+            else
+            {
+               errorDisplay.innerHTML = "";  // clear error area
+            } // end else
+
+            return valid; // return validity tracker
+         }
+
+         
+         // check if the e-mail address user entered is not allowed
+         // to post feedback
+         function checkIfAllowed( input )
+         {
+            if ( asyncRequest.readyState == 4 && 
+              asyncRequest.status == 200 &&  asyncRequest.responseXML )
+            {
+	       //Your task is to add statements to implement the functions indicated by the comments 
+               // get the emails from the responseXML
+
+
+
+               // initialize return value
+               
+
+
+               // iterate over the list of e-mails not allowed to post
+               // feedback and check if the input matches any of them
+
+               
+
+
+               
+               
+               // display appropriate error message
+               
+
+
+               // clear the error area
+
+
+               
+	   } // end of if
+
+         } // end function checkIfAllowed
+
+      </script>
+   <script type="text/javascript" src="/d2l/common/math/MathML.js?v=10.7.5.38204-197" ></script><script type="text/javascript">document.addEventListener('DOMContentLoaded', function() { D2LMathML.DesktopInit('https://s.brightspace.com/lib/mathjax/2.6.1/MathJax.js?config=MML_HTMLorMML','https://s.brightspace.com/lib/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML%2cSafe'); });</script><script type="text/javascript">function lti_launch( vars ) { var query = ''; for(var key in vars) { if(query.length == 0) { query += '?' + key + '=' + encodeURIComponent(vars[key]); } else { query += '&' + key + '=' + encodeURIComponent(vars[key]); } } location.replace( '/d2l/customization/pearsonlti/6605/Launch' + query ); }</script></head>
+   <body>
+      <h1>Feedback Form</h1>
+      <p>Please fill out this form to help us improve our site.</p>
+
+      <form method = "post" action = "">
+
+         <p><label>Name: 
+               <input name = "name" type = "text" size = "25" 
+               onblur = "validateNotEmpty( this.value, 'nameError' )"/>
+            </label><span id = "nameError" class = "errorMessage"></span>
+        </p>
+ 
+         <!-- <textarea> creates a multiline textbox -->
+         <p>
+	 <label>Comments:<br />
+            <textarea name = "comments" rows = "4" cols = "36" 
+               onblur = "validateNotEmpty( this.value, 'commentsError' )"
+               >Enter comments here.</textarea>
+         </label>
+
+         <span id = "commentsError" class = "errorMessage"></span>
+	 </p>
+
+         <!-- <input type = "password"> inserts a -->
+         <!-- textbox whose display is masked with -->
+         <!-- asterisk characters -->
+         <p><label>E-mail Address: 
+            <input name = "email" type = "text"  size = "25"
+            onblur = "validateEmail( this.value )"/>
+         </label>
+        </p>
+        <div id = "emailEmptyError"></div>
+        <div id = "emailFormatError"></div> 
+        <div id = "emailNotAllowedError"></div>
+
+         <p>
+            <strong>Things you liked:</strong><br />
+
+            <label>Site design
+               <input name = "thingsliked" type = "checkbox" 
+                  value = "Design" /></label>
+            <label>Links
+               <input name = "thingsliked" type = "checkbox" 
+                  value = "Links" /></label>
+            <label>Ease of use
+               <input name = "thingsliked" type = "checkbox" 
+                  value = "Ease" /></label> 
+            <label>Images 
+               <input name = "thingsliked" type = "checkbox" 
+                  value = "Images" /></label>
+            <label>Source code
+               <input name = "thingsliked" type = "checkbox" 
+                  value = "Code" /></label>
+         </p>
+
+         <!-- <input type = "radio" /> creates a radio -->
+         <!-- button. The difference between radio buttons -->
+         <!-- and checkboxes is that only one radio button -->
+         <!-- in a group can be selected. -->
+         <p>
+            <strong>How did you get to our site?:</strong><br />
+
+            <label>Search engine
+               <input name = "howtosite" type = "radio"
+                  value = "search engine" checked = "checked" /></label>
+            <label>Links from another site
+               <input name = "howtosite" type = "radio" 
+                  value = "link" /></label> 
+            <label>Deitel.com Web site
+               <input name = "howtosite" type = "radio" 
+                  value = "deitel.com" /></label>
+            <label>Reference in a book
+               <input name = "howtosite" type = "radio" 
+                  value = "book" /></label>
+            <label>Other
+               <input name = "howtosite" type = "radio" 
+                  value = "other" /></label>
+         </p>
+
+         <p>
+            <label>Rate our site: 
+
+                <!-- the <select> tag presents a drop-down -->
+                <!-- list with choices indicated by the -->
+                <!-- <option> tags -->
+               <select name = "rating">
+                  <option selected = "selected">Amazing</option>
+                  <option>10</option>
+                  <option>9</option>
+                  <option>8</option>
+                  <option>7</option>
+                  <option>6</option>
+                  <option>5</option>
+                  <option>4</option>
+                  <option>3</option>
+                  <option>2</option>
+                  <option>1</option>
+                  <option>Awful</option>
+               </select>
+            </label>
+         </p>
+
+         <p>
+            <input type = "submit" value = "Submit" />
+            <input type = "reset" value = "Clear" />
+         </p>   
+      </form>
+   </body>
+</html>
+
+  
+ 
+
+

@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+<script type="text/javascript">
+/* When a user clicks on the "Get CD info" button above, the loadXMLDoc() function is executed.
+
+The loadXMLDoc() function creates an XMLHttpRequest object, adds the function to be executed when the server response is ready, and sends the request off to the server.
+
+When the server response is ready, an HTML table is built, nodes (elements) are extracted from the XML file, and it finally updates the txtCDInfo placeholder with the HTML table filled with XML data.
+*/
+                                                                                                                            
+function getContent(url)
+{
+xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange=function()
+{
+	if(xmlhttp.readyState==4 && xmlhttp.status==200){
+		//console.log(xmlhttp.responseText);
+		document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+	
+	}
+}
+xmlhttp.open("GET",url,true);
+xmlhttp.send();
+} //end of loadXMLDoc(url)
+function clearContent(){
+	document.getElementById("myDiv").innerHTML="";
+}
+
+
+
+</script>
+</head>
+
+<body>
+<img src ="deakin-campus.jpg" 
+onmouseover = "getContent('deakin-campus.html')" onmouseout = 'clearContent()'/>
+
+<img src ="discover-deakin.jpg" 
+onmouseover = "getContent('discover-deakin.html')" onmouseout = 'clearContent()'/>
+
+ <a href="practical4.html" 
+ onmouseover = "getContent('practical4.html.html')" onmouseout = 'clearContent()'/></a> 
+ 
+<div id="myDiv">anoop</div>
+</body>
+</html>

@@ -1,0 +1,477 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SIT203: Practical seven</title>
+<meta name="keywords" content="web site development, AJAX, PHP and Oracle DB" />
+<meta name="description" content="Practical on Ajax, PHP and Oracle db" />
+<meta http-equiv="creation_date" content="Wednesday, 5 July 2017" />
+<meta http-equiv="reply-to" content="shang@deakin.edu.au" />
+<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+<link href="sit203.css" rel="stylesheet" type="text/css"  />
+</head>
+
+<body bgcolor="#ffffff">
+<h2>Practical 7: PHP, AJAX &amp; Oracle Database</h2>
+<p style="text-align: left; margin-left: 15px; padding-left: 0px;">Upon completion of this session you should be able to:</p>
+<ul>
+<li>connect to Oracle database on Deakin Web server</li>
+<li>use PHP to retieve records from Oracle database</li>
+<li>create Ajax applications to access Oracle database</li>
+</ul>
+<div align="center">
+<table style="width: 600px;" border="0" cellpadding="5" cellspacing="5">
+<tbody>
+<tr valign="middle">
+<td align="center" width="200"><a href="#background"><img src="basicbutton-background.jpg" alt="" height="41" border="0" width="126" /></a></td>
+<td align="center" width="200"><a href="#tasks"><img src="basicbutton-tasks.jpg" alt="" height="41" border="0" width="126" /></a></td>
+<td align="center" width="200"><a href="#summary"><img src="basicbutton-summary.jpg" alt="" height="41" border="0" width="126" /></a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><a name="background"></a></p>
+<h3>Background</h3>
+<p>(Note: if a link is not loaded properly in CloudDeakin, please right click on the link and open it in New Tab.)</p>
+<p>Let's review the PHP and Oracle database connect first. Please skip to <a href="#Ajax">Ajax and PHP</a> if you've done this part in SIT104.</p>
+<h4>Oracle</h4>
+<p>For any program or script to access a database requires a <em>driver</em> of some kind; 
+a piece of software that links the program (in our case a PHP script and the interpreter) to the database. 
+There are several ways that we can do this, depending on which platform (operating system) the web server is running, 
+and the database systems available on that system. Each way has a somewhat different setup, and uses slightly different PHP syntax. 
+This makes for code that is not fully portable, but that is one of the problems that 'real world' 
+system developers in this field have to grapple with. We will focus on how to make it work, and on understanding what is happening, 
+rather than on different ways of doing this. Those who want to know more can obviously do some research to extend the material we are covering here.</p>
+<p>The <em>Oracle</em> database management system is available on the University system, and accessible by Telnet. 
+Also the Deakin web server has support for using PHP  with Oracle databases. 
+So in this unit, we chose to use <em>Oracle</em> database management system to create and manage the databases, 
+and the Deakin web server to deliver the PHP pages.</p>
+<h4>Accessing Oracle</h4>
+<p>Now we are going to use PHP to connect to and retrieve information from an Oracle database table named "plants"; then we will add records to (and change values in) the database table. Download <a href="prac7SQL.txt">this plants table </a> and <a href="plant_pics.zip">plants pics</a>, then save them onto your Deakin home area (eg. public_html/SIT203/).</p>
+<p>This table (called <em>Plants</em>) has eight fields: Drainage, Aspect, Temperature, Height, Foliage, CommonName, SpeciesName, and Photo. If you open this file in note pad, you would see all the sql statements used to create a table and insert records in this <em>Plants</em> table:</p>
+<p style="text-align: center;"><img src="sql.jpg" alt="SQL in note pad" border="0" /></p>
+<p>This table currently has twenty records (lines of data) in it. We are going to retrieve those data using PHP, and display the data in neat web pages.</p>
+<p>Now telnet (eg. using Putty or Tera Term Pro) to Deakin web server: host can be set as interactive.deakin.edu.au.</p>
+<p style="text-align: center;"><img src="telnet1.jpg" alt="telnet" border="0" /></p>
+<p>Input Deakin user id and password, and select "SQLPlus to SSID" from the menu:</p>
+<p style="text-align: center;"><img src="telnet2.jpg" alt="select SSID" /></p>
+<p>By defualt, your Deakin password is also your Oracle database password. <strong>We'd better change the Oracle password as we have to hardcode it in the php file later on.</strong></p>
+<p>Under SQL&gt; prompt, type "<strong>password</strong>" to change it and "<strong>@public_html/SIT203/prac7SQL.txt</strong>" to load the plants table in Oracle database. Path "public_html/SIT203" is where we save the plants table prac7SQL.txt:</p>
+<p>Now the plant table is created in the Oracle database. We need to <em>connect to</em> our database; that is, we have to tell the PHP server where the database is, and how to access it. Create a new php page, and insert the following code fragment in the &lt;body&gt; part.</p>
+<!--
+OCILogon—oci_connect
+OCIParse – oci_parse
+OCIExecute – oci_execute
+OCIFetch – oci_fetch_array
+OCILogOff – oci_close
+OCIResult - oci_result
+-->
+<p class="red-indented">&lt;?php</p>
+<p class="red-indented">/* Set oracle user login and password info */<br /> $dbuser = "xxx"; /* your deakin login */<br /> $dbpass = "xxxxx"; /* your oracle access password */<br /> $db = "SSID"; <br /> $connect = oci_connect($dbuser, $dbpass, $db);</p>
+<p class="red-indented">if (!$connect) {<br /> echo "An error occurred connecting to the database"; <br /> exit; <br /> }<br /> <br /> /* build sql statement using form data */<br /> $query = "SELECT * FROM Plants";</p>
+<p class="red-indented">/* check the sql statement for errors and if errors report them */<br /> $stmt = oci_parse($connect, $query); <br /> //echo "SQL: $query&lt;br&gt;";<br /> if(!$stmt) {<br /> echo "An error occurred in parsing the sql string.\n"; <br /> exit; <br /> }<br /> oci_execute($stmt);?&gt;</p>
+<p>Your Oracle user id (which is the same as your Deakin user name ), password and the name of the Oracle database "SSID" are all we need to connect to the database .</p>
+<p>Once we have established a connection we can work with the database in any way we want. The last statement <span class="red-indented"><strong>oci_execute($stmt)</strong></span> retrieves a collection of records ('sets of data') from the database; it does so using a particular and important method, namely the Structured Query Language, <strong>SQL</strong>.</p>
+<h4>An SQL primer</h4>
+<p>SQL is a way of structuring <em>queries</em> on databases. Suppose I wanted to ask "<strong>Which plants like dry soil?</strong>" I know there is a <em>Drainage</em> field in the database, and I know that a 1 in that field means 'dry soil'. The query can then be seen as "which records in the database (if any) have a value of 1 in the Drainage field?" When we apply that query, we will get a recordset consisting of zero, one or many records (sets of data), each representing a plant that matches the criterion (Drainage = 1).</p>
+<p>SQL was developed to provide a clear and consistent way to formulate such queries (and many others). All SQL queries are formed as pseudo-sentences, with a particular structure and keywords. Perhaps the simplest would be:</p>
+<p class="red-indented">SELECT * FROM Plants</p>
+<p>which means <em>retrieve all the fields</em> (<span class="sql">SELECT *</span>) <em>in the table called Plants</em> (<span class="sql">FROM Plants</span>). In most (but not all) systems the SQL keywords like SELECT and ORDER have to be upper case, so it is a sensible approach to stick to upper case; this also serves to 'separate' them visually from field names and values.</p>
+<p>Unless we tell it otherwise, executing this query will retrieve all the records in the chosen table. If we want only some of the records - in our example we want only those records with a drainage value of 1 - we need to add the <span class="sql">WHERE</span> keyword to the statement. (<strong>note the single quotes around the value of Drainage</strong>):</p>
+<p class="red-indented">SELECT * FROM Plants WHERE Drainage='1'</p>
+<p>This will retrieve all fields for all the relevant records (if any) ready to be displayed; the name of the field (Drainage) must <em><strong>exactly</strong></em> match one of the fields in the database.</p>
+<p>The sequence in which the retrieved records appear is based by default on where they are in the database (which is based on the order in which they were added to the database), but we can override that by asking for them to be sorted:</p>
+<p class="red-indented">SELECT * FROM Plants ORDER BY Temperature</p>
+<p>The records are now sorted in 'temperature order'. By default this sort order is from lowest to highest; we can override this by specifying the sort order as <span class="sql">ASC</span> (ascending: lowest to highest) or <span class="sql">DESC</span> (descending: highest to lowest):</p>
+<p class="red-indented">SELECT * FROM Plants ORDER BY Temperature DESC</p>
+<p>If we want a 'secondary sort' (when records have the same temperature value, they are sorted by another property) we can add another field name:</p>
+<p class="red-indented">SELECT * FROM Plants ORDER BY Temperature, CommonName</p>
+<p>... which brings us full-circle to the <em>Execute</em> statement in our code earlier!</p>
+<p>We change the contents of the string inside <span class="red-indented"><strong>oci_execute( )</strong></span> to change what records we retrieve. We can put any legal SQL statement we want into there; next we will look at how we can create that statement 'on the fly' using values extracted from a form completed by a user (that is, a 'lookup form').</p>
+<h4>Using the oci_fetch_array</h4>
+<p>The whole point of being able to retrieve data in this way is to use that data and to display it. We want to do this in a reasonably attractive visual manner (HTML + styles), and in a way that matches the data; as this is a data set (rows and columns) the most obvious way is to create a table. In the rest of the code for this session we are going to use a style sheet that has a 'green' look-and-feel (<a href="access.css">access.css</a>) that has an obvious relation to data (plants), so we link that in the head section as usual (and don't forget to also upload the style sheet to the Deakin web server):</p>
+<p class="red-indented">&lt;link rel="stylesheet" type="text/css" href="access.css"&gt;</p>
+<p>Start with some normal HTML to set up the page and the table (including the first row of headers); put this at the top of the body section or after <span class="red-indented">command "<span class="red-indented style2">oci_execute($stmt);?&gt;</span>" </span>:</p>
+<p class="red-indented">&lt;h1 class="green"&gt;PHP and Oracle databases&lt;/h1&gt;<br /> &lt;h4&gt;Table: &lt;em&gt;Plants&lt;/em&gt;&lt;/h4&gt;<br /> &lt;div align="center"&gt;<br /> &lt;table width="850" border="0" bgcolor="#339933" cellpadding="5" cellspacing="1"&gt;<br /> &lt;tr bgcolor="#006633"&gt;<br /> &lt;td width="75" style="color:#ffff99"&gt;Drainage&lt;/td&gt;<br /> &lt;td width="75" style="color:#ffff99"&gt;Aspect&lt;/td&gt;<br /> &lt;td width="100" style="color:#ffff99"&gt;Temperature&lt;/td&gt;<br /> &lt;td width="75" style="color:#ffff99"&gt;Height&lt;/td&gt;<br /> &lt;td width="75" style="color:#ffff99"&gt;Foliage&lt;/td&gt;<br /> &lt;td width="200" style="color:#ffff99"&gt;Common Name&lt;/td&gt;<br /> &lt;td width="250" style="color:#ffff99"&gt;Species Name&lt;/td&gt;<br /> &lt;/tr&gt;</p>
+<p>Leave planty of blank lines, then copy the following lines and paste them just before the close of the body section to 'close out' the table and the page:</p>
+<p class="red-indented">&lt;/table&gt;<br /> &lt;/div&gt;</p>
+<p>Notice that this is all 'pure' HTML, but the bulk of the table needs to be created using the retrieved data, so it has to be done inside a PHP code block (&lt;?php&nbsp;.&nbsp;.&nbsp;.&nbsp;?&gt;). We need to display the records, one row of the table for each record we have retrieved - so we need to put all the code to do this between these two existing blocks. It also means that we need to <em>loop</em> through all the records; actually we should probably check first if there <em>are</em> any records, otherwise the table will be empty and strange-looking! (We'll do that in the next session.)</p>
+<p>We need to loop through the records, but we don't know how many there are (yet), so we can't use a <strong>for </strong>loop; this is one of the uses of the <strong>while</strong> loop, and our <em>stopping condition</em> is when we have reached the 'end of the file' :</p>
+<p class="red-indented">while(oci_fetch_array($stmt)) {<br /> .<br /> .<br /> // do stuff with the retrieved records <br /> .<br /> .<br /> }</p>
+<p>We access the individual fields in our retrieved records using statements of the form <em>$fg1 = oci_result($stmt,"DRAINAGE"); //Drainage must appear <strong>uppercase</strong></em> or <em>$fg1 = oci_result($stmt, 2)</em>; <em>// 2 is the column number of drainage field</em> <em> in plants table </em>. This places the value of the Drainage field for the current record into a variable called <strong>$fg1</strong> (which can be any legitimate variable name, of course), ready to be displayed using our familiar <strong>echo</strong> statement:</p>
+<p class="red-indented">$fg1 = oci_result($stmt,"DRAINAGE");<br /> echo ($fg1);</p>
+<p>We can modify the default appearance of the resulting text by placing normal HTML tags in with it as strings:</p>
+<p class="red-indented">$fg1 = oci_result($stmt,"DRAINAGE");<br /> echo ("&lt;em&gt;".$fg1."&lt;/em&gt;");</p>
+<p>Okay, copy and paste all of the following code between the two blocks you have already put into the file (between &lt;/tr&gt; ... and ... &lt;/table&gt;):</p>
+<p class="red-indented">&lt;?php</p>
+<p class="red-indented">// Display all the values in the retrieved records, one record per row, in a loop<br /> while(oci_fetch_array($stmt)) {<br /> // Start a row for each record<br /> echo("&lt;tr valign=top bgcolor=#ccffcc&gt;");<br /> // Output fields, one per column<br /> // Drainage value in column one<br /> $fg1 = oci_result($stmt,"DRAINAGE"); //"Drainage";<br /> echo("&lt;td width=75&gt;");<br /> echo ($fg1);<br /> echo("&lt;/td&gt;");<br /> // Aspect value in column two<br /> $fg2 = oci_result($stmt,"ASPECT");//"Aspect";<br /> echo("&lt;td width=75&gt;");<br /> echo ($fg2);<br /> echo("&lt;/td&gt;");<br /> // Temperature value in column three<br /> $fg3 = oci_result($stmt,"TEMPERATURE");//"Temperature";<br /> echo("&lt;td width=75&gt;");<br /> echo ($fg3);<br /> echo("&lt;/td&gt;");<br /> // Height value in column four<br /> $fg4 = oci_result($stmt,"HEIGHT");//"Height"; <br /> echo("&lt;td width=75&gt;");<br /> echo ($fg4);<br /> echo("&lt;/td&gt;");<br /> // Foliage value in column five<br /> $fg5 = oci_result($stmt,"FOLIAGE");//"Foliage"; <br /> echo("&lt;td width=75&gt;");<br /> echo ($fg5);<br /> echo("&lt;/td&gt;");<br /> // Common Name and Photo in column six<br /> $fg6 = oci_result($stmt,"COMMONNAME");//"CommonName";<br /> echo("&lt;td width=250&gt;");<br /> echo ($fg6);<br /> $fg8 = oci_result($stmt,"PHOTO");//"Photo";<br /> // Pictures are in a 'plants' sub-directory elsewhere on the server, so use the full URL<br /> 
+echo ("&lt;br&gt;&lt;img src=http://www.deakin.edu.au/<span style="background-color:yellow">~shang/SIT203</span>/plant_pics/".$fg8."&gt;&lt;br&gt;");<br /> echo("&lt;/td&gt;");<br /> // Sepcies Name in column seven<br /> $fg7 = oci_result($stmt,"SPECIESNAME");//"SpeciesName"; <br /> echo("&lt;td width=250&gt;&lt;em&gt;");<br /> echo ($fg7);<br /> echo("&lt;/em&gt;&lt;/td&gt;");</p>
+<p class="red-indented">// End the row <br /> echo("&lt;/tr&gt;");<br /> } <br /> // Close the connection<br /> oci_close($connect); <br /> ?&gt;</p>
+<p class="red-indented"></p>
+<p>You should be able to see that we put the field value into a variable ($fg1 ... $fg7), create a table cell (&lt;td&gt;) for each field (the order that we display them as columns is up to us), write the value of the field into it with an echo statement, then close the cell (&lt;/td&gt;). As well as numbers and text, this table has field that stores links to a picture of each plant; We use a text field for this, and we store the name of the image file (such as acacia.jpg). When we display that field, as these files are <em>not</em> in the same directory as the script file, we have to point to them; we could use a relative path (../plants_pics/ for example), or we could use the full URL as we are doing here. If you are using images in this way in your database table, you would just put them in your folder under public_html directory on the Deakin web server and specify the full path or URL.</p>
+<p>If all goes well ... when you deliver this page from the Deakin web server [using its full URL, such as <span class="sql">http://www.deakin.edu.au/~your_user_id/SIT203/practical7.php</span>, you should see a web page that looks something like this:</p>
+<p style="text-align: center;"><img src="browse.JPG" alt="plants output " height="650" border="0" width="888" /></p>
+<p>This looks pretty good, but it could easily be made more attractive and understandable as a table. What if we used the value of the various fields that we retrieve to set the background colour of the relevant cell? This would 'colour code' the various cells to emphasise the structure of the table a bit more. Let's apply this approach first to the Temperature field (which is our <em>primary sort</em> field). Find the four lines that output the temperature value for each record:</p>
+<p class="red-indented">&nbsp;&nbsp;&nbsp;$fg3 = oci_result($stmt,"TEMPERATURE");<br /> &nbsp;&nbsp;&nbsp;echo("&lt;td width=75&gt;");<br /> &nbsp;&nbsp;&nbsp;echo $fg3;<br /> &nbsp;&nbsp;&nbsp;echo("&lt;/td&gt;");</p>
+<p>and replace them with the following block of code:</p>
+<p class="red-indented">&nbsp;&nbsp;$fg3 = oci_result($stmt,"TEMPERATURE");<br /> // Set bgcolor by value<br /> &nbsp;&nbsp;switch (intval($fg3)) {<br /> &nbsp;&nbsp;case 1: <br /> &nbsp;&nbsp;&nbsp;&nbsp;echo("&lt;td width=100 class=red1&gt;");<br /> &nbsp;&nbsp;&nbsp;&nbsp;break;<br /> &nbsp;&nbsp;case 2:<br /> &nbsp;&nbsp;&nbsp;&nbsp;echo("&lt;td width=100 class=red2&gt;");<br /> &nbsp;&nbsp;&nbsp;&nbsp;break;<br /> &nbsp;&nbsp;case 3:<br /> &nbsp;&nbsp;&nbsp;&nbsp;echo("&lt;td width=100 class=red3&gt;");<br /> &nbsp;&nbsp;&nbsp;&nbsp;break;<br /> &nbsp;&nbsp;case 4:<br /> &nbsp;&nbsp;&nbsp;&nbsp;echo("&lt;td width=100 class=red4&gt;");<br /> }<br /> &nbsp;&nbsp;echo $fg3;<br /> &nbsp;&nbsp;echo("&lt;/td&gt;");</p>
+<p>When you upload and deliver it from the Deakin web server now the page should look like this:</p>
+<p style="text-align: center;"><img src="browse2.JPG" alt="plants output " height="682" width="966" /></p>
+<p>All we are doing is using the <strong>switch</strong> statement to set the bgcolor of a cell, based on the retrieved temperature value. As we prefer an integer (1, 2, ...) case, and the Temperature field in our database is a text field, we convert the value to an integer with the <strong>intval()</strong> function.</p>
+<p>Finally, replace the lines that display the value of the Drainage field</p>
+<p class="red-indented">&nbsp;&nbsp;&nbsp;$fg1 = oci_result($stmt,"DRAINAGE");<br /> &nbsp;&nbsp;&nbsp;echo("&lt;td width=75&gt;");<br /> &nbsp;&nbsp;&nbsp;echo $fg1;<br /> &nbsp;&nbsp;&nbsp;echo("&lt;/td&gt;");</p>
+<p>with the following block of code:</p>
+<p class="red-indented">&nbsp;&nbsp;$fg1 = oci_result($stmt,"DRAINAGE");<br /> // Set bgcolor by value<br /> &nbsp;&nbsp;switch (intval($fg1)) {<br /> &nbsp;&nbsp;case 1: <br /> &nbsp;&nbsp;&nbsp;&nbsp;echo("&lt;td width=100 class=blue1&gt;");<br /> &nbsp;&nbsp;&nbsp;&nbsp;break;<br /> &nbsp;&nbsp;case 2:<br /> &nbsp;&nbsp;&nbsp;&nbsp;echo("&lt;td width=100 class=blue2&gt;");<br /> &nbsp;&nbsp;&nbsp;&nbsp;break;<br /> &nbsp;&nbsp;case 3:<br /> &nbsp;&nbsp;&nbsp;&nbsp;echo("&lt;td width=100 class=blue3&gt;");<br /> &nbsp;&nbsp;&nbsp;&nbsp;break;<br /> &nbsp;&nbsp;case 4:<br /> &nbsp;&nbsp;&nbsp;&nbsp;echo("&lt;td width=100 class=blue4&gt;");<br /> &nbsp;&nbsp;&nbsp;&nbsp;break;<br /> &nbsp;&nbsp;case 5:<br /> &nbsp;&nbsp;&nbsp;&nbsp;echo("&lt;td width=100 class=blue5&gt;");<br /> }<br /> &nbsp;&nbsp;echo $fg1;<br /> &nbsp;&nbsp;echo("&lt;/td&gt;");</p>
+<p>The page should now look like this:</p>
+<p style="text-align: center;"><img src="browse3.JPG" alt="plants output" height="679" width="967" /></p>
+<p>You can experiment with the layout of the table in various other ways; all you need to do is use the values of the retrieved data to control style properties. You can also experiment with the SQL statement itself; to become more familiar with SQL (ready for subsequent practicals and the assignment) you should try to</p>
+<ul>
+<li>modify the ORDER fields (e.g. <span class="sql">SELECT * FROM Plants ORDER By SpeciesName, Aspect, Drainage</span>)</li>
+<li>include a WHERE component to retrieve a sub-set of the records (e.g. <span class="sql">SELECT * FROM Plants WHERE Aspect='4'</span>)</li>
+<li>choose which fields to retrieve; instead of <span class="sql">SELECT *</span> (all fields) you can specify to retrieve only certain fields with (e.g. <span class="sql">SELECT Drainage, Temperature, CommonName FROM Plants</span>); you will need to change the table structure as you will only have (in this example) three columns of values for each record, not seven.</li>
+</ul>
+<p>Make sure that the whole string is in double quotes - and don't forget the single quotes in the WHERE section!</p>
+<p style="text-align: center; background: #99ccff; padding: 10px; margin-left: 50px; margin-right: 50px; font-weight: bold;">In subsequent practicals we will assume that you know how to create SQL statements to retrieve data, so make sure that you are thoroughly familiar with this process. Time spent on this will be amply rewarded later; 'just making it work' should not be enough.</p>
+<h4 id="Ajax">Ajax and PHP</h4>
+<p>We know Ajax is used to create more interactive applications. A server side programm called by the XMLHttpRequest object can be a PHP file.</p>
+<p>For example, the following Ajax programm demonstrates how a web page can communicate with a web server while a user type characters in an input field. When a user types a character in the input field above, the function "showHint()" is executed. The function is triggered by the "onkeyup" event:</p>
+<p class="red-indented">&lt;!doctype html&gt;<br />
+  &lt;html&gt;<br />
+  &lt;head&gt;<br />
+  &lt;script type="text/javascript"&gt;<br />
+  function showHint(str)<br />
+  {<br />
+  if (str.length==0)<br />
+  &nbsp; { <br />
+  &nbsp; document.getElementById("txtHint").innerHTML="";<br />
+  &nbsp; return;<br />
+  &nbsp; }<br />
+  xmlhttp=new XMLHttpRequest();</p>
+<p class="red-indented"> xmlhttp.onreadystatechange=function()<br />
+  &nbsp; {<br />
+  &nbsp; if (xmlhttp.readyState==4 &amp;&amp; xmlhttp.status==200)<br />
+  &nbsp;&nbsp;&nbsp; {<br />
+  &nbsp;&nbsp;&nbsp; document.getElementById("txtHint").innerHTML=xmlhttp.responseText;<br />
+  &nbsp;&nbsp;&nbsp; }<br />
+  &nbsp; }<br />
+  xmlhttp.open("GET","gethint.php?q="+str,true);<br />
+  xmlhttp.send();<br />
+  }<br />
+  &lt;/script&gt;<br />
+  &lt;/head<br />
+  &lt;body&gt;<br />
+  <br />
+  &lt;p&gt;&lt;b&gt;Start typing a name in the input field below:&lt;/b&gt;&lt;/p&gt;<br />
+  &lt;form&gt; <br />
+  First name: &lt;input type="text" onkeyup="showHint(this.value)" size="20" /&gt;<br />
+  &lt;/form&gt;<br />
+  &lt;p&gt;Suggestions: &lt;span id="txtHint"&gt;&lt;/span&gt;&lt;/p&gt;<br />
+  <br />
+  &lt;/body&gt;<br />
+  &lt;/html&gt;</p>
+<p>If the input field is empty (str.length==0), the function clears the content of the txtHint placeholder and exits the function.</p>
+<p>If the input field is not empty, the showHint() function executes the following:</p>
+<ul>
+<li>Create an XMLHttpRequest object</li>
+<li>Create the function to be executed when the server response is ready</li>
+<li>Send the request off to a file on the server</li>
+<li>Notice that a parameter (q) is added to the URL (with the content of the input field)</li>
+</ul>
+<p>The page on the server called by the JavaScript above is a PHP file called "gethint.php". It checks an array of names, and returns the corresponding name(s) to the browser:</p>
+<p class="red-indented">&lt;?php<br /> // Fill up array with names<br /> $a[]="Anna";<br /> $a[]="Brittany";<br /> $a[]="Cinderella";<br /> $a[]="Diana";<br /> $a[]="Eva";<br /> $a[]="Fiona";<br /> $a[]="Gunda";<br /> $a[]="Hege";<br /> $a[]="Inga";<br /> $a[]="Johanna";<br /> $a[]="Kitty";<br /> $a[]="Linda";<br /> $a[]="Nina";<br /> $a[]="Ophelia";<br /> $a[]="Petunia";<br /> $a[]="Amanda";<br /> $a[]="Raquel";<br /> $a[]="Cindy";<br /> $a[]="Doris";<br /> $a[]="Eve";<br /> $a[]="Evita";<br /> $a[]="Sunniva";<br /> $a[]="Tove";<br /> $a[]="Unni";<br /> $a[]="Violet";<br /> $a[]="Liza";<br /> $a[]="Elizabeth";<br /> $a[]="Ellen";<br /> $a[]="Wenche";<br /> $a[]="Vicky";<br /> <br /> //get the q parameter from URL<br /> $q=$_GET["q"];<br /> <br /> //lookup all hints from array if length of q&gt;0<br /> if (strlen($q) &gt; 0)<br /> &nbsp; {<br /> &nbsp; $hint="";<br /> &nbsp; for($i=0; $i&lt;count($a); $i++)<br /> &nbsp;&nbsp;&nbsp; {<br /> &nbsp;&nbsp;&nbsp; if (strtolower($q)==strtolower(substr($a[$i],0,strlen($q))))<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ($hint=="")<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $hint=$a[$i];<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $hint=$hint." , ".$a[$i];<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br /> &nbsp;&nbsp;&nbsp; }<br /> &nbsp; }<br /> <br /> // Set output to "no suggestion" if no hint were found<br /> // or to the correct values<br /> if ($hint == "")<br /> &nbsp; {<br /> &nbsp; $response="no suggestion";<br /> &nbsp; }<br /> else<br /> &nbsp; {<br /> &nbsp; $response=$hint;<br /> &nbsp; }<br /> <br /> //output the response<br /> echo $response;<br /> ?&gt;</p>
+<p>If there is any text sent from the JavaScript (strlen($q) &gt; 0), the following happens:</p>
+<ol>
+<li>Find a name matching the characters sent from the JavaScript</li>
+<li>If no match were found, set the response string to "no suggestion"</li>
+<li>If one or more matching names were found, set the response string to all these names</li>
+<li>The response is sent to the "txtHint" placeholder</li>
+</ol>
+<h4>Ajax, PHP and Oracle</h4>
+<p>AJAX can be used for interactive communication with a database. The following example demonstrates how a web page fetches information from an Oracle database with AJAX:</p>
+<p>The database table we use in this example looks like this. You need to create this table first in your Oracle database:</p>
+<p class="red-indented">DROP TABLE users;<br /><br /> CREATE TABLE users<br /> ( id NUMBER(4) NOT NULL, <br /> FirstName VARCHAR2(10), <br /> LastName VARCHAR2(10),<br /> Age VARCHAR(10),<br /> Hometown VARCHAR(10), <br /> Job VARCHAR2(50), <br /> Primary key (id) <br /> ); <br /><br /> INSERT INTO users VALUES (1,'Mary','Doss', '42', 'Geelong', 'High School teacher');<br /> INSERT INTO users VALUES (2,'Robert','Dew', '40', 'Newport', 'Piano Teacher');<br /> INSERT INTO users VALUES (3,'Matt','Rough', '34', 'Geelong', 'University Lecturer');<br /><br /> commit;</p>
+<p>When a user selects a user in the dropdown list above, a function called "showUser()" is executed. The function is triggered by the "onchange" event:</p>
+<p class="red-indented">&lt;!doctype html&gt;<br />
+  &lt;html&gt;<br />
+  &lt;head&gt;<br />
+  &lt;script type="text/javascript"&gt;<br />
+  function showUser(str)<br />
+  {<br />
+  if (str=="")<br />
+  &nbsp; {<br />
+  &nbsp; document.getElementById("txtHint").innerHTML="";<br />
+  &nbsp; return;<br />
+  &nbsp; } <br />
+  xmlhttp=new XMLHttpRequest();</p>
+<p class="red-indented"> xmlhttp.onreadystatechange=function()<br />
+  &nbsp; {<br />
+  &nbsp; if (xmlhttp.readyState==4 &amp;&amp; xmlhttp.status==200)<br />
+  &nbsp;&nbsp;&nbsp; {<br />
+  &nbsp;&nbsp;&nbsp; document.getElementById("txtHint").innerHTML=xmlhttp.responseText;<br />
+  &nbsp;&nbsp;&nbsp; }<br />
+  &nbsp; }<br />
+  xmlhttp.open("GET","getuser.php?q="+str,true);<br />
+  xmlhttp.send();<br />
+  }<br />
+  &lt;/script&gt;<br />
+  &lt;/head&gt;<br />
+  &lt;body&gt;<br />
+  &lt;form&gt;<br />
+  Select a Customer:<br />
+  &lt;select name="customers" onchange="showUser(this.value)"&gt;<br />
+  &lt;option value="0"&gt;--select one --&lt;/option&gt;<br />
+  &lt;option value="1"&gt;Mary Doss&lt;/option&gt;<br />
+  &lt;option value="2"&gt;Robert Dew&lt;/option&gt;<br />
+  &lt;option value="3"&gt;Justin Rough&lt;/option&gt;<br />
+  &lt;/select&gt;<br />
+  &lt;/form&gt;<br />
+  &lt;br /&gt;<br />
+  &lt;div id="txtHint"&gt;&lt;b&gt;Person info will be listed here.&lt;/b&gt;&lt;/div&gt;<br />
+  <br />
+  &lt;/body&gt;<br />
+  &lt;/html&gt;</p>
+<p>The page on the server called by the JavaScript above is a PHP file called "getuser.php". It runs a query against an Oracle database, and returns the result in an HTML table:</p>
+<p class="red-indented">&lt;?php<br /> <br />/*<br /> The database table we use in this example looks like this:<br /> id FirstName LastName Age Hometown Job<br /> 1 Mary Doss 42 Geelong High school teacher<br /> 2 Robert Dew 40 Newport Piano Teacher<br /> 3 Justin Rough 34 Geelong University Lecturer<br /> */<br /> <br /> $q=$_GET["q"]; //or $q=$_REQUEST["q"];<br /> <br /> /* Set oracle user login and password info */<br /> $dbuser = "xxx"; /* your deakin login */<br /> $dbpass = "xxxx"; /* your oracle access password */<br /> $db = "SSID";<br /> $connect = oci_connect($dbuser, $dbpass, $db);<br /> <br />if (!$connect) {<br /> echo "An error occurred connecting to the database";<br /> exit;<br /> }<br /> <br />/* build sql statement using form data */<br /> $query ="SELECT * FROM users WHERE id = '".$q."'";<br /> <br />/* check the sql statement for errors and if errors report them */<br /> $stmt = oci_parse($connect, $query);<br /> <br />if(!$stmt) {<br /> echo "An error occurred in parsing the sql string.\n";<br /> exit;<br /> }<br /> oci_execute($stmt);<br /> <br />echo "&lt;table border='1'&gt;<br /> &lt;tr&gt;<br /> &lt;th&gt;Firstname&lt;/th&gt;<br /> &lt;th&gt;Lastname&lt;/th&gt;<br /> &lt;th&gt;Age&lt;/th&gt;<br /> &lt;th&gt;Hometown&lt;/th&gt;<br /> &lt;th&gt;Job&lt;/th&gt;<br /> &lt;/tr&gt;";<br /> <br />// Display all the values in the retrieved records, one record per row, in a loop<br /> while(oci_fetch_array($stmt)) {<br /> echo "&lt;tr&gt;";<br /> echo "&lt;td&gt;" . oci_result($stmt,"FIRSTNAME") . "&lt;/td&gt;";<br /> echo "&lt;td&gt;" . oci_result($stmt,"LASTNAME") . "&lt;/td&gt;";<br /> echo "&lt;td&gt;" . oci_result($stmt,"AGE") . "&lt;/td&gt;";<br /> echo "&lt;td&gt;" . oci_result($stmt,"HOMETOWN") . "&lt;/td&gt;";<br /> echo "&lt;td&gt;" . oci_result($stmt,"JOB") . "&lt;/td&gt;";<br /> echo "&lt;/tr&gt;";<br /> }<br /> echo "&lt;/table&gt;";<br /> <br />// Close the connection<br /> oci_close($connect); <br /> ?&gt;</p>
+<p>When the query is sent from the JavaScript to the PHP file, the following happens:</p>
+<ol>
+<li>PHP opens a connection to Oracle db</li>
+<li>The correct person is found</li>
+<li>An HTML table is created, filled with data, and sent back to the "txtHint" placeholder</li>
+</ol><!--
+<h4>Ajax, PHP and XML</h4>
+<p>AJAX can also communicate with an XML   file. The following example  demonstrates how a web page can fetch information   from an XML file with AJAX.</p>
+<p>When a user selects a CD in the dropdown list, a function called   "showCD()" is executed. The function is triggered by the "onchange" event:</p>
+<p class="red-indented">&lt;html&gt;<BR>
+  &lt;head&gt;<BR>
+  &lt;script   type="text/javascript"&gt;<BR>
+  function showCD(str)<BR>
+  {<BR>
+  if (str=="")<BR>
+      {<BR>
+    document.getElementById("txtHint").innerHTML="";<BR>
+    return;<BR>
+    } <BR>
+  xmlhttp.onreadystatechange=function()<BR>
+    {<BR>
+    if (xmlhttp.readyState==4   &amp;&amp; xmlhttp.status==200)<BR>
+      {<BR>
+        document.getElementById("txtHint").innerHTML=xmlhttp.responseText;<BR>
+      }<BR>
+      }<BR>
+  xmlhttp=new XMLHttpRequest();
+  xmlhttp.open("GET","getcd.php?q="+str,true);<BR>
+  xmlhttp.send();<BR>
+  }<BR>
+  &lt;/script&gt;<BR>
+  &lt;/head&gt;<BR>
+  &lt;body&gt;<BR>
+  <BR>
+  &lt;form&gt;<BR>
+  Select   a CD:<BR>
+  &lt;select name="cds" onchange="showCD(this.value)"&gt;<BR>
+  &lt;option   value=""&gt;Select a CD:&lt;/option&gt;<BR>
+  &lt;option value="Bob Dylan"&gt;Bob   Dylan&lt;/option&gt;<BR>
+  &lt;option value="Bonnie Tyler"&gt;Bonnie   Tyler&lt;/option&gt;<BR>
+  &lt;option value="Dolly Parton"&gt;Dolly   Parton&lt;/option&gt;<BR>
+  &lt;/select&gt;<BR>
+  &lt;/form&gt;<BR>
+  &lt;div   id="txtHint"&gt;&lt;b&gt;CD info will be listed   here...&lt;/b&gt;&lt;/div&gt;<BR>
+  <BR>
+  &lt;/body&gt;<BR>
+&lt;/html&gt;</p>
+<p>The showCD() function does the following:</p>
+<UL>
+  <LI>Check if a CD is selected   
+  <LI>Create an XMLHttpRequest object   
+  <LI>Create the function to be executed when the server response is ready   
+  <LI>Send the request off to a file on the server   
+  <LI>Notice that a parameter (q) is added to the URL (with the content of the   dropdown list) </LI>
+</UL>
+<p>The page on the server called by the JavaScript above is a PHP file called   "getcd.php".  It loads an XML document, "<A href="cd_catalog.xml" target="_blank">cd_catalog.xml</A>", runs a query against the XML file, and   returns the result as HTML:</p>
+<p class="red-indented">&lt;?php<BR>
+  $q=$_GET["q"];<BR>
+  <BR>
+  $xmlDoc = new   DOMDocument();<BR>
+  $xmlDoc-&gt;load("cd_catalog.xml");<BR>
+  <BR>
+  $x=$xmlDoc-&gt;getElementsByTagName('ARTIST');<BR>
+  <BR>
+  for   ($i=0; $i&lt;=$x-&gt;length-1; $i++)<BR>
+  {<BR>
+  //Process only element nodes<BR>
+  if   ($x-&gt;item($i)-&gt;nodeType==1)<BR>
+    {<BR>
+    if   ($x-&gt;item($i)-&gt;childNodes-&gt;item(0)-&gt;nodeValue ==   $q)<BR>
+      {<BR>
+      $y=($x-&gt;item($i)-&gt;parentNode);<BR>
+      }<BR>
+    }<BR>
+  }<BR>
+  <BR>
+  $cd=($y-&gt;childNodes);<BR>
+  <BR>
+  for   ($i=0;$i&lt;$cd-&gt;length;$i++)<BR>
+  { <BR>
+  //Process only element nodes<BR>
+  if   ($cd-&gt;item($i)-&gt;nodeType==1)<BR>
+    {<BR>
+    echo("&lt;b&gt;" .   $cd-&gt;item($i)-&gt;nodeName . ":&lt;/b&gt;   ");<BR>
+    echo($cd-&gt;item($i)-&gt;childNodes-&gt;item(0)-&gt;nodeValue);<BR>
+    echo("&lt;br   /&gt;");<BR>
+    }<BR>
+  }<BR>
+?&gt; </p>
+<p>The showCD() function does the following:</p>
+<UL>
+  <LI>Check if a CD is selected   
+  <LI>Create an XMLHttpRequest object   
+  <LI>Create the function to be executed when the server response is ready   
+  <LI>Send the request off to a file on the server   
+  <LI>Notice that a parameter (q) is added to the URL (with the content of the   dropdown list) </LI>
+</UL>
+
+<h4>Ajax, PHP and Live Search</h4>
+<p>AJAX can be used to create more user-friendly and interactive   searches. The following example  demonstrates a live search, where you get search   results while you type.</p>
+<p>Live search has many benefits compared to traditional searching:</p>
+<UL>
+  <LI>Results are shown as you type   
+  <LI>Results narrow as you continue typing   
+  <LI>If results become too narrow, remove characters to see a broader result </LI>
+</UL>
+<p>When a user types a character in the input field above, the function   "showResult()" is executed. The function is triggered by the "onkeyup"   event:</p>
+<p class="red-indented">&lt;html&gt;<BR>
+  &lt;head&gt;<BR>
+  &lt;script   type="text/javascript"&gt;<BR>
+  function showResult(str)<BR>
+  {<BR>
+  if   (str.length==0)<BR>
+    { <BR>
+    document.getElementById("livesearch").innerHTML="";<BR>
+    document.getElementById("livesearch").style.border="0px";<BR>
+      return;<BR>
+    }<BR>
+  if (window.XMLHttpRequest)<BR>
+    {// code for IE7+, Firefox,   Chrome, Opera, Safari<BR>
+    xmlhttp=new XMLHttpRequest();<BR>
+    }<BR>
+  else<BR>
+    {//   code for IE6, IE5<BR>
+    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");<BR>
+      }<BR>
+  xmlhttp.onreadystatechange=function()<BR>
+    {<BR>
+    if (xmlhttp.readyState==4   &amp;&amp; xmlhttp.status==200)<BR>
+      {<BR>
+        document.getElementById("livesearch").innerHTML=xmlhttp.responseText;<BR>
+        document.getElementById("livesearch").style.border="1px solid #A5ACB2";<BR>
+        }<BR>
+      }<BR>
+  xmlhttp.open("GET","livesearch.php?q="+str,true);<BR>
+  xmlhttp.send();<BR>
+  }<BR>
+  &lt;/script&gt;<BR>
+  &lt;/head&gt;<BR>
+  &lt;body&gt;<BR>
+  <BR>
+  &lt;form&gt;<BR>
+  &lt;input   type="text" size="30" onkeyup="showResult(this.value)" /&gt;<BR>
+  &lt;div   id="livesearch"&gt;&lt;/div&gt;<BR>
+  &lt;/form&gt;<BR>
+  <BR>
+  &lt;/body&gt;<BR>
+&lt;/html&gt; </p>
+<p>If the input field is empty (str.length==0), the function clears the content   of the livesearch placeholder and exits the function.</p>
+<p>If the input field is not empty, the showResult() function executes the   following:</p>
+<UL>
+  <LI>Create an XMLHttpRequest object   
+  <LI>Create the function to be executed when the server response is ready   
+  <LI>Send the request off to a file on the server   
+  <LI>Notice that a parameter (q) is added to the URL (with the content of the   input field) </LI>
+</UL>
+<p>The page on the server called by the JavaScript above is a PHP file called   "livesearch.php".  It searches an XML file for titles matching   the search string and returns the result:</p>
+<p class="red-indented">&lt;?php<BR>
+  $xmlDoc=new   DOMDocument();<BR>
+  $xmlDoc-&gt;load("links.xml");<BR>
+  <BR>
+  $x=$xmlDoc-&gt;getElementsByTagName('link');<BR>
+  <BR>
+  //get   the q parameter from URL<BR>
+  $q=$_GET["q"];<BR>
+  <BR>
+  //lookup all links from the   xml file if length of q&gt;0<BR>
+  if   (strlen($q)&gt;0)<BR>
+  {<BR>
+  $hint="";<BR>
+  for($i=0; $i&lt;($x-&gt;length);   $i++)<BR>
+    {<BR>
+    $y=$x-&gt;item($i)-&gt;getElementsByTagName('title');<BR>
+    $z=$x-&gt;item($i)-&gt;getElementsByTagName('url');<BR>
+    if   ($y-&gt;item(0)-&gt;nodeType==1)<BR>
+      {<BR>
+      //find a link matching the   search text<BR>
+      if   (stristr($y-&gt;item(0)-&gt;childNodes-&gt;item(0)-&gt;nodeValue,$q))<BR>
+        {<BR>
+        if   ($hint=="")<BR>
+          {<BR>
+          $hint="&lt;a href='" . <BR>
+          $z-&gt;item(0)-&gt;childNodes-&gt;item(0)-&gt;nodeValue . <BR>
+          "' target='_blank'&gt;" . <BR>
+          $y-&gt;item(0)-&gt;childNodes-&gt;item(0)-&gt;nodeValue .   "&lt;/a&gt;";<BR>
+          }<BR>
+        else<BR>
+          {<BR>
+          $hint=$hint .   "&lt;br /&gt;&lt;a href='" . <BR>
+          $z-&gt;item(0)-&gt;childNodes-&gt;item(0)-&gt;nodeValue . <BR>
+          "' target='_blank'&gt;" . <BR>
+          $y-&gt;item(0)-&gt;childNodes-&gt;item(0)-&gt;nodeValue .   "&lt;/a&gt;";<BR>
+          }<BR>
+        }<BR>
+      }<BR>
+    }<BR>
+  }<BR>
+  <BR>
+  // Set output   to "no suggestion" if no hint were found<BR>
+  // or to the correct values<BR>
+  if   ($hint=="")<BR>
+    {<BR>
+    $response="no   suggestion";<BR>
+    }<BR>
+  else<BR>
+    {<BR>
+    $response=$hint;<BR>
+    }<BR>
+  <BR>
+  //output   the response<BR>
+  echo $response;<BR>
+?&gt; </p>
+<p>If there is any text sent from the JavaScript (strlen($q) &gt; 0), the   following happens:</p>
+<UL>
+  <LI>Load an XML file into a new XML DOM object   
+  <LI>Loop through all &lt;title&gt; elements to find matches from the text sent   from the JavaScript   
+  <LI>Sets the correct url and title in the "$response" variable. If more than one   match is found, all matches are added to the variable   
+  <LI>If no matches are found, the $response variable is set to "no suggestion" </LI>
+</UL>
+
+-->
+<p>&nbsp;</p>
+<p><a name="tasks"></a></p>
+<h3>Tasks</h3>
+<ol>
+<li>Try the above given examples and make them work.</li>
+<li>Based on the proivded code, build database tables for your products and/or services used in your assignment 1, create Ajax applications to manipulate your database records.</li>
+</ol>
+<p><span style="text-decoration: underline;">Please show your attempt to your tutor before you leave the lab, or email your files to your coordinator if you are an off-campus student. </span></p>
+<p><a name="summary"></a></p>
+<h3>Summary</h3>
+<p>In this session we have covered</p>
+<ul>
+<li>extract data from a database using PHP</li>
+<li>create formatted output pages based on the data</li>
+<li>create Ajax PHP application</li>
+</ul>
+<h3>References</h3>
+<p>The contents of this week's practical are obtained from the following websites with moderate modifications:</p>
+<p>1. Practical 8: PHP and Databases, SIT104 Introduction to Web Development CloudDeakin website, Deakin University, 2017.</p>
+<p>2. PHP and Ajax page, w3schools website, available at &lt;http://www.w3schools.com/php/php_ajax_php.asp&gt;, accessed 05/07/2017.</p>
+<p>&nbsp;</p>
+</body>
+</html>

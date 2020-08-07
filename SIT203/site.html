@@ -1,0 +1,175 @@
+
+<!DOCTYPE>
+<html>
+<head>
+<title>My products</title>
+<link href="style.css" rel="stylesheet" type="text/css" />
+<!-- <script src="pagination-with-js-and-xml.js"></script> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#reset").click(function (e) {
+            location.reload();
+        });
+ 
+        $("#loadButton").click(function (e) {
+            //$("#tempDiv").load("products.xml", function (response, status, xhr) {
+			$("#tempDiv").load("cdcatalog.xml", function (response, status, xhr) {
+                if (status != "error") {
+                    /*Hiding the loading image*/
+                    $("#loadingImg").hide();
+                    /*End*/
+ 
+                    DisplayXML(1);
+                }
+            });
+ 
+            /*Showing the loading image*/
+            $("#loadingImg").show();
+            /*End*/
+ 
+        });
+ 
+        function DisplayXML(pageNo) {
+            var xmlDoc = $.parseXML($("#tempDiv").html());
+            var xml = $(xmlDoc);
+			//eq() method returns an element with a specific index number of the selected elements.
+            var nodeName = xml.find("*").eq(1)[0].nodeName; //get CD nodeName
+			//alert(nodeName);
+            var nodes = xml.find(nodeName); //find all CD nodes
+ 
+            var pageSize = 5;
+            totalRecords = nodes.length;
+ 
+            /*Table Header*/
+            var table = $("<table>");
+            var tr = $("<tr>");
+            $.each($(nodes[0]).find("*"), function (index, value) {
+                var th = $("<th>");
+                th.append(value.nodeName);
+                tr.append(th);
+            });
+            table.append(tr);
+            /*End*/
+ 
+            /*Table Data*/
+            for (i = (pageNo - 1) * pageSize; i < (pageNo * pageSize) ; i++) {
+                var tr = $("<tr>");				
+				
+		
+					var Name,product,brand, price, material, details,images;
+					//var td = $("<td>");
+					
+					name= $(nodes[i]).children("NAME").text();
+					//td.append(title);
+                    tr.append("<td>"+name+"</td>");
+					
+					product= $(nodes[i]).children("PRODUCT").text();
+					tr.append("<td>"+product+"</td>");
+					
+					brand= $(nodes[i]).children("BRAND").text();
+					tr.append("<td>"+brand+"</td>");
+					
+					price= $(nodes[i]).children("price").text();
+					tr.append("<td>"+price+"</td>");
+					
+					details= $(nodes[i]).children("DETAILS").text();
+					tr.append("<td>"+details+"</td>");
+					
+					material= $(nodes[i]).children("MATERIAL").text();
+					tr.append("<td>"+material+"</td>");
+					
+					image= $(nodes[i]).children("PICTURE").text();
+					tr.append("<td><img src='"+image+"' height='100' width='100'/></td>");
+					
+					
+				
+				/*
+                var child = $(nodes[i]).find("*");
+ 
+                $.each(child, function (index, value) {
+                    var td = $("<td>");
+                    td.append($(value).text());
+                    tr.append(td);
+                });
+				*/
+				
+                table.append(tr);
+            }
+            /*End*/
+ 
+            $("#resultDiv").html(table);
+ 
+            /*Paging*/
+            var result = Paging(pageNo, 5, totalRecords, "myClass", "myDisableClass");
+            $("#pagingDiv").html(result)
+            /*Paging*/
+        }
+ 
+        $("#pagingDiv").on("click", "a", function () {
+            DisplayXML($(this).attr("pn"));
+        });
+ 
+        function Paging(PageNumber, PageSize, TotalRecords, ClassName, DisableClassName) {
+            var ReturnValue = "";
+ 
+            var TotalPages = Math.ceil(TotalRecords / PageSize);
+            if (+PageNumber > 1) {
+                if (+PageNumber == 2)
+                    ReturnValue = ReturnValue + "<a pn='" + (+PageNumber - 1) + "' class='" + ClassName + "'>Previous</a>&nbsp;&nbsp;&nbsp;";
+                else {
+                    ReturnValue = ReturnValue + "<a pn='";
+                    ReturnValue = ReturnValue + (+PageNumber - 1) + "' class='" + ClassName + "'>Previous</a>&nbsp;&nbsp;&nbsp;";
+                }
+            }
+            else
+                ReturnValue = ReturnValue + "<span class='" + DisableClassName + "'>Previous</span>&nbsp;&nbsp;&nbsp;";
+            if ((+PageNumber - 3) > 1)
+                ReturnValue = ReturnValue + "<a pn='1' class='" + ClassName + "'>1</a>&nbsp;.....&nbsp;|&nbsp;";
+            for (var i = +PageNumber - 3; i <= +PageNumber; i++)
+                if (i >= 1) {
+                    if (+PageNumber != i) {
+                        ReturnValue = ReturnValue + "<a pn='";
+                        ReturnValue = ReturnValue + i + "' class='" + ClassName + "'>" + i + "</a>&nbsp;|&nbsp;";
+                    }
+                    else {
+                        ReturnValue = ReturnValue + "<span style='font-weight:bold;'>" + i + "</span>&nbsp;|&nbsp;";
+                    }
+                }
+            for (var i = +PageNumber + 1; i <= +PageNumber + 3; i++)
+                if (i <= TotalPages) {
+                    if (+PageNumber != i) {
+                        ReturnValue = ReturnValue + "<a pn='";
+                        ReturnValue = ReturnValue + i + "' class='" + ClassName + "'>" + i + "</a>&nbsp;|&nbsp;";
+                    }
+                    else {
+                        ReturnValue = ReturnValue + "<span style='font-weight:bold;'>" + i + "</span>&nbsp;|&nbsp;";
+                    }
+                }
+            if ((+PageNumber + 3) < TotalPages) {
+                ReturnValue = ReturnValue + ".....&nbsp;<a pn='";
+                ReturnValue = ReturnValue + TotalPages + "' class='" + ClassName + "'>" + TotalPages + "</a>";
+            }
+            if (+PageNumber < TotalPages) {
+                ReturnValue = ReturnValue + "&nbsp;&nbsp;&nbsp;<a pn='";
+                ReturnValue = ReturnValue + (+PageNumber + 1) + "' class='" + ClassName + "'>Next</a>";
+            }
+            else
+                ReturnValue = ReturnValue + "&nbsp;&nbsp;&nbsp;<span class='" + DisableClassName + "'>Next</span>";
+ 
+            return (ReturnValue);
+        }
+ 
+    });
+</script>
+</head>
+<body>
+
+<button id="loadButton">Load XML</button>
+<div id="tempDiv" style="display:none"></div>
+<div id="resultDiv"></div>
+<div id="pagingDiv"></div>
+<img id="loadingImg" src="img/AjaxLoder.gif" />
+
+</body>
+</html>

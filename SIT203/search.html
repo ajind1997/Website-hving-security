@@ -1,0 +1,95 @@
+
+<html>
+<head>  
+<style>
+body {
+    background-image: url("jj.jpeg");
+	
+	background-repeat:no-repeat;
+	background-position:center;
+	background-size: cover;
+   
+}
+</style>
+
+<title>  Search Form   </title>
+
+ <script>
+	function validate(){
+
+	  if(document.getElementById('categories').selectedIndex==0){
+                	 alert("please select category");
+	  return false;
+			 }
+	         
+				
+		return true;
+			 
+	}
+	
+	</script>
+</head> 
+<body bgcolor="#ffebcd">
+<h1>
+	 <p style="text-align:center"> <b> Search Form </b> </p> 
+	
+</h1>
+<!-- Navigation bar -->
+<p>
+<table border=2 cellpadding=10>
+<tr>
+<td>
+<a href ="hom.html"> Home </a>
+</td><td>
+<a href ="register.html"> Register</a>
+</td><td>
+<a href ="order.html"> Order</a>
+</td><td>
+<a href ="Search2.html"> Search</a>
+</td><td>
+<a href ="Contact.html"> Contact</a>
+</td>
+<td>
+<a href ="site.html">Site</a>
+</td>
+<td>
+<a href ="Shop.html">Shop</a>
+</td>
+</tr>
+</table>
+</p>
+
+<!-- Form started -->
+<form action='' method='get' onsubmit="return validate()">
+
+Search items by Categories: <br><br>      
+<select name='categories' id='categories'> <br>
+	<option value='Please Select'>Please Select</option>
+	<option value='chairs'>Chairs</option>
+	<option value='beds'>Beds</option>
+	<option value='tables'>Tables</option>
+	<option value='storage'>Storage</option>
+	<option value='home decoration'>Home Decoration</option>
+	<option value='textiles'>Textiles</option>
+	<option value='lighting'>Lighting</option> 
+	<option value='plant pots'>Plant Pots</option> 
+	
+	</select> <br><br> <br><br> 
+
+	<button type ="submit" >Search </button>
+</form>	
+
+
+
+
+
+  </body>
+
+
+</html>
+	
+	
+	
+	
+
+	

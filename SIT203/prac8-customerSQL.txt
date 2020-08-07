@@ -1,0 +1,26 @@
+DROP TABLE Customers;
+
+CREATE TABLE Customers
+     ( ID  NUMBER(4) NOT NULL, 
+       Firstname VARCHAR2(40), 
+       Lastname VARCHAR2(30),
+	Username VARCHAR2(10),
+	Password VARCHAR2(10),
+       Address VARCHAR2(100),
+       Email VARCHAR2(30), 
+       Phone VARCHAR2(30),        
+       Primary key (ID) 
+     ); 
+
+
+
+
+INSERT INTO Customers VALUES (1,'ajinder','kaur', 'anoop','anoop', 'montpellier', 'kaurajinder801@gmail.com', '123456789');
+
+INSERT INTO Customers VALUES (2,'Robert','Dew', 'robert','robert','4 Bigpond Road, Belmont, Vic. 3216', 'rad@hotmail.com', '03-52254324');
+
+INSERT INTO Customers VALUES (3,'Justin','Rough', 'justin','justin', '27 Valley Road, Highton, Vic. 3216', 'rough@gmail.com', '03-52345678');
+
+INSERT INTO Customers VALUES (4,'Robbin','Doss', 'robin', 'robin','12 Melbourne Avenue, Box Hill, Vic. 3100', 'robin@gmail.com', '03-56783214');
+
+commit;

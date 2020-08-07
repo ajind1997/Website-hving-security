@@ -1,0 +1,55 @@
+h1.green {
+background-color:#006600; color:#ffffcc; padding:10px; text-align:center;
+}
+
+h3.green {
+background-color:#006600; color:#ffffcc; padding:5px;
+}
+
+td.blue1 {
+background-color: #ccffff; 
+}
+
+td.blue2 {
+background-color: #00ffff; 
+}
+
+td.blue3 {
+background-color: #33ccff; 
+}
+
+td.blue4 {
+background-color: #0099ff; 
+}
+
+td.blue5 {
+color:#020202;background-color:#0033ff; 
+}
+
+td.red1 {
+background-color: #ffcccc; 
+}
+
+td.red2 {
+background-color: #ff99cc; 
+}
+
+td.red3 {
+background-color: #ff6699; 
+}
+
+td.red4 {
+background-color: #ff3366; 
+}
+
+p.code { 
+text-align:left;margin-left:35px;padding-left:0px;font-family:"Courier New";color:#006633; 
+}
+
+td.code { 
+font-family:"Courier New";color:red 
+}
+
+p.popupcode { 
+text-align:left;margin-left:35px;padding-left:0px;font-family:"Courier New";color:#006633;font-size:85%;
+}

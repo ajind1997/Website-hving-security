@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="table.xsl"?>
+<catalog>
+  <cd>
+    <calories>total:260 Calories</calories>
+    <fat>total:11 grams</fat>
+    <cholesterol>5 milligrams</cholesterol>
+    <sodium>210 milligrams</sodium>
+    <carbohydrates>total:36 grams</carbohydrates>
+    <protein>5 grams</protein>
+  </cd>
+  
+   <cd>
+   <calories>total:260 Calories</calories>
+    <fat>total:11 grams</fat>
+    <cholesterol></cholesterol>
+    <sodium></sodium>
+    <carbohydrates>total:36 grams</carbohydrates>
+    <protein>5 grams</protein>
+  </cd>
+  
+   <cd>
+   <calories></calories>
+    <fat></fat>
+    <cholesterol></cholesterol>
+    <sodium></sodium>
+    <carbohydrates>5 grams</carbohydrates>
+    <protein></protein>
+  </cd>
+  
+ 
+ 
+</catalog>
+
+

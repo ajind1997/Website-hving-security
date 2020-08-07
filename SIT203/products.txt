@@ -1,0 +1,107 @@
+DROP TABLE items;
+
+CREATE TABLE Products
+     ( id NUMBER (20) PRIMARY KEY,
+       name VARCHAR(40), 
+       product VARCHAR2(60), 
+       brand VARCHAR2(90),
+       price NUMBER(30),
+       details VARCHAR(300),
+       material VARCHAR(20),
+       picture VARCHAR(100)
+         ); 
+
+INSERT INTO Products VALUES (1001,'chair','emma tub armchair','universal',170,'The Emma Armchair is sure to be 
+	your chair of choice in any room. The 
+	fabric-upholstered seat has been covered 
+	with delicate linen fabric and filled with 17cm 
+	thick foam cushioning for extra comfort','wood','img/carter-tub-chair1.jpg');
+
+INSERT INTO Products VALUES (1002,'chair','spencer swivel chair','ikea',199,'Add a touch of cutting edge style to your
+	living room with the Spencer Swivel Chair. Stylishly
+	upholstered in smart polyurethane with button-back detailing,
+	the modern Europeandesign will add a contemporary flourish to any home','linen fabric','img/carter-tub-chair-2.jpg');
+
+INSERT INTO Products VALUES (1003,'chair','carter tub chair','the factory',169,'With a deep back and sides and a smooth,
+	rounded design, this smart chair will cocoon you while you 
+	sit or curl up.  Stylish and comfortable, the Carter
+	Chair makes a great occasional chair for the home or office','wood','img/emma-tub-armchair-1.jpg');
+
+INSERT INTO Products VALUES (1004,'chair','jazz armchair','fantastic',349,'Jazz up your lounge 
+	room with the fabulous Jazz Armchair, featuring an ultra 
+	trendy design with streamlined arms, timber legs and plump 
+	seats. Stitched and pulled-in back cushions give this sofa 
+	a designer flair','linen fabric',img/emma-tub-armchair-2.jpg');
+
+INSERT INTO Products VALUES (2002,'bed','bingo single bed','ikea',69,'Make the most of your space and manage sleepovers without
+	the hassle. The super-convenient Gecko Trundle is built from strong 
+	tubular steel and powder coated for superior chip resistance.
+	Lockable wheels allow you to simply roll out the trundle when needed
+	and store back under the bed when not in use','steel','img/bingo-single-bed-1.jpg');
+
+INSERT INTO Products VALUES (2003,'bed','zac single bed','fantastic',68,'Bingo! You've found the best value bed in town.
+	With a metal frame and a straightforward design this bed 
+	has sturdy contruction, is easy 
+	to decorate and has plenty of storage space underneath','steel','img/bingo-single-bed-2.jpg');
+
+INSERT INTO Products VALUES (2004,'bed','my first toddler bed','artdeco',99,'The Zac single bed combines solid pine and metal 
+	dowels to create a bed with a versatile, light look. 
+	(Mattress not included)','steel','img/gecko-single-bed-trundle-1.jpg');
+
+INSERT INTO Products VALUES (3001,'bed','host tray table','universal',129,'Set low to the ground for easy access, little ones 
+	will feel so grown-up when they climb into bed all by 
+	themselves with this fabulous first bed.  High sides provide 
+	comfort and security so toddlers can sleep soundly all
+	night long','wood','img/gecko-single-bed-trundle-2.jpg');
+
+INSERT INTO Products VALUES (3002,'table','geo multi-use table','ikea',29,'This handy tray table folds flat and stores neatly out of the way when not in use,
+	making a great space saving furniture choice for occasional use','wood','img/geomulti-use-table-1.jpg');
+
+INSERT INTO Products VALUES (3003,'table','hayman coffee table','fantastic',40,'For a handy coffee table or TV stand 
+	with storage, check out the versatile Geo Multi-Use table','wood','img/geomulti-use-table-2.jpg');
+
+INSERT INTO Products VALUES (3004,'table','studio coffee table','the factory',99,'Add a relaxed vibe to your lounge room with this
+	smart white Hayman Coffee Table. Featuring slatted sides
+	and a slimline design, this versatile coffee 
+	table will add a laid-back coastal look to your home','wood','img/heyman-coffee-table-1.jpg');
+
+INSERT INTO Products VALUES (3004,'table','studio coffee table','ikea',129,'Featuring a combination of timber look panels
+	and a black metal frame, this smart coffee table will add a
+	touch of industrial style to your home. A warm wood foil 
+	finish gives a realistic timber look for a great price','steel','img/heyman-coffee-table-2.jpg');
+
+INSERT INTO Products VALUES (4001,'storage','lynx small wie bookcase','universal',59,'Adjustable shelves allow you to display items of different heights. 
+	Create a stylish cabinet and prevent dust build up by adding two glass doors','wood','img/maine-2-shelf-storage-rack-1.jpg');
+
+INSERT INTO Products VALUES (4002,'storage','code 2 drawer insert','ikea',59,'This handy 2-drawer unit provides great additional 
+	storage where you need it most. Use as a shelf insert with 
+	the Coda 6 and 10 Shelf bookcase, as a wardrobe insert or as 
+	a free-standing drawer unit for your desk 
+	or shelf to keep paperwork and stationery neatly stored away','wood','img/maine-2-shelf-storage-rack-2.jpg');
+
+INSERT INTO Products VALUES (4003,'storage','alpine 2 door wardobe','ikea',99,'The sleek look and incredible price of this robe make it 
+	a smart buy. With plenty of hanging space it's an ideal storage solution 
+	in the in the spareroom or kids room. Hanging rail is included','wood','img/apline-2-door-wardobe-1.jpg');
+
+INSERT INTO Products VALUES (4003,'storage','home 2 door wardobe','artdeco',459,'Get the look and convenience of a built-in wardrobes 
+	without the need to commit to expensive home renovations. The 
+	freestanding 120 cm Home Robe features two aluminium framed
+	sliding doors, a fixed top shelf, and a strong hanging 
+	rail. Cheating has never been easier with this no fuss solution','wood','img/apline-2-door-wardobe-2.jpg');
+
+INSERT INTO Products VALUES (17,'homedeco','galaxy cheval mirror','universal',59,'Take a good long look at yourself 
+	and throw some light around your bedroom with this sleek, modern cheval mirror','wood','order.jpeg');
+
+INSERT INTO Products VALUES (18,'textiles','olive rug','artdeco',79,'Refresh your space with the tribal energy of
+	a pure cotton rug that has been stonewashed for
+	an authentic vintage look','cotton','pg.png');
+
+INSERT INTO Products VALUES (7001,'lighting','mackenzie table lamp','the factory',49,'Perfect for the home office or bedroom, this stylish angle poise lamp features a contemporary design in a combination of metal and wood
+	for a funky look. Choose from a black or white finish to suit your interior','metal','img/mackenzie-table-lamp-1.jpg');
+
+INSERT INTO Products VALUES (8001,'plant pots','maine 2 shelf storage rack','artdeco',49,'The Maine 2 Tier Shelving Bench
+	makes storage simple with its charming white painted finish.
+	The unit has 2 wide shelves, great for multipurpose storage 
+	in the bathroom or even as a shoe rack','wood','img/basketsquare.jpg');
+
+commit;

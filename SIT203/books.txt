@@ -1,0 +1,64 @@
+DROP TABLE Products;
+
+CREATE TABLE Products
+     ( name VARCHAR(4) NOT NULL, 
+       product VARCHAR2(10), 
+       brand VARCHAR2(10),
+       
+     ); 
+
+INSERT INTO Products VALUES ('chair','emma tub armchair','universal');
+
+INSERT INTO Products VALUES ('chair','spencer swivel chair','ikea');
+
+INSERT INTO Products VALUES ('chair','carter tub chair','the factory');
+
+INSERT INTO Products VALUES ('chair','jazz armchair','fantastic');
+
+INSERT INTO Products VALUES ('bed','bingo single bed','ikea');
+
+INSERT INTO Products VALUES ('bed','zac single bed','fantastic');
+
+INSERT INTO Products VALUES ('bed','my first toddler bed','artdeco');
+
+INSERT INTO Products VALUES ('bed','host tray table','universal');
+
+INSERT INTO Products VALUES ('table','geo multi-use table','ikea');
+
+INSERT INTO Products VALUES ('table','hayman coffee table','fantastic');
+
+INSERT INTO Products VALUES ('table','studio coffee table','the factory');
+
+INSERT INTO Products VALUES ('table','studio coffee table','ikea');
+
+INSERT INTO Products VALUES ('storage','lynx small wie bookcase','universal');
+
+INSERT INTO Products VALUES ('storage','code 2 drawer insert','ikea');
+
+INSERT INTO Products VALUES ('storage','alpine 2 door wardobe',ikea');
+
+INSERT INTO Products VALUES ('storage','home 2 door wardobe','artdeco');
+
+INSERT INTO Products VALUES ('homedeco','galaxy cheval mirror','universal');
+
+INSERT INTO Products VALUES ('textiles','olive rug','artdeco');
+
+INSERT INTO Products VALUES ('lighting','mackenzie table lamp','the factory');
+
+INSERT INTO Products VALUES ('plant pots','maine 2 shelf storage rack','artdeco');
+
+commit;DROP TABLE books;
+
+CREATE TABLE books (
+id NUMBER(6) NOT NULL,
+title VARCHAR2(100) NOT NULL ,
+author VARCHAR2(100) NOT NULL ,
+price DECIMAL(10,2) NOT NULL ,
+PRIMARY KEY (id)
+) ;
+
+INSERT INTO books VALUES (1, 'Operating Systems', 'Dhamdhere', '54.99');
+INSERT INTO books VALUES (2, 'Internet and World Wide Web How to Program', 'P.J. Deitel', '79.99');
+INSERT INTO books VALUES (3, 'Porgramming the WWW', 'Robert W. Sebesta', '44.99');
+
+commit;

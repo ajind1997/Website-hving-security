@@ -1,0 +1,11 @@
+Acknowledgement
+
+This sample solution is provoided by Mr. Andrew Quinn, who is one of our 2018 SIT203 students. 
+He has kindly agreed to share his excellent work with us, hoping it helps others.
+
+We'd like to thank Andrew for his kindness. 
+
+BR,
+
+Shang on behalf of 2018 SIT203 teaching team
+28/08/2018

@@ -1,0 +1,40 @@
+DROP TABLE cdcatalog;
+
+CREATE TABLE cdcatalog(
+id NUMBER(6) NOT NULL,
+title VARCHAR2(100) NOT NULL ,
+artist VARCHAR2(100) NOT NULL ,
+country VARCHAR2(100) NOT NULL ,
+company VARCHAR2(100) NOT NULL ,
+price DECIMAL(10,2) NOT NULL ,
+year VARCHAR2(10) NOT NULL ,
+PRIMARY KEY (id)
+) ;
+
+INSERT INTO cdcatalog VALUES (1, 'Empire Burlesque', 'Bob Dylan', 'USA', 'Columbia', '10.90' , '1985');
+INSERT INTO cdcatalog VALUES (2, 'Hide your heart', 'Bob Dylan', 'UK', 'CBS Records', '9.99' , '1988');
+INSERT INTO cdcatalog VALUES (3, 'Greatest Hits', 'Dolly Parton', 'USA', 'RCA', '19.90' , '1982');
+INSERT INTO cdcatalog VALUES (4, 'Still got the blues', 'Gary Moore', 'USA', 'RCA', '9.90' , '1982');
+INSERT INTO cdcatalog VALUES (5, 'Eros', 'Eros Ramazzotti', 'USA', 'RCA', '5.90' , '1982');
+INSERT INTO cdcatalog VALUES (6, 'One night only', 'Bee Gees', 'USA', 'RCA', '9.90' , '1982');
+INSERT INTO cdcatalog VALUES (7, 'Sylvias Mother', 'Dr.Hook', 'USA', 'RCA', '6.90' , '1982');
+INSERT INTO cdcatalog VALUES (8, 'Maggie May', 'Rod Stewart', 'USA', 'RCA', '19.90' , '1982');
+INSERT INTO cdcatalog VALUES (9, 'Romanza', 'Andrea Bocelli', 'USA', 'RCA', '9.90' , '1982');
+INSERT INTO cdcatalog VALUES (10, 'When a man loves a woman', 'Percy Sledge', 'USA', 'RCA', '9.90' , '1982');
+INSERT INTO cdcatalog VALUES (11, 'Black angel', 'Savage Rose', 'USA', 'RCA', '9.90' , '1982');
+INSERT INTO cdcatalog VALUES (12, '1999 Grammy Nominees', 'Many', 'USA', 'RCA', '9.90' , '1982');
+INSERT INTO cdcatalog VALUES (13, 'For the good times', 'Kenny Rogers', 'USA', 'RCA', '12.90' , '1982');
+INSERT INTO cdcatalog VALUES (14, 'Big Willie style', 'Will Smith', 'USA', 'RCA', '9.90' , '1982');
+INSERT INTO cdcatalog VALUES (15, 'Tupelo Honey', 'Van Morrison', 'USA', 'RCA', '9.90' , '1982');
+INSERT INTO cdcatalog VALUES (16, 'Soulsville', 'Jorn Hoel', 'USA', 'RCA', '9.90' , '1982');
+INSERT INTO cdcatalog VALUES (17, 'The very best of', 'Cat Stevens', 'USA', 'RCA', '11.90' , '1982');
+INSERT INTO cdcatalog VALUES (18, 'Stop', 'Sam Brown', 'USA', 'RCA', '9.90' , '1982');
+INSERT INTO cdcatalog VALUES (19, 'Bridge of Spies', 'T Pau', 'USA', 'RCA', '9.90' , '1982');
+INSERT INTO cdcatalog VALUES (20, 'Private Dancer', 'Tina Turner', 'USA', 'RCA', '13.90' , '1982');
+INSERT INTO cdcatalog VALUES (21, 'Midt om natten', 'Kim Larsen', 'USA', 'Columbia', '10.90' , '1985');
+INSERT INTO cdcatalog VALUES (22, 'Pavarotti Gala Concert', 'Luciano Pavarotti', 'UK', 'CBS Records', '9.99' , '1988');
+INSERT INTO cdcatalog VALUES (23, 'The dock of the bay', 'Otis Redding', 'USA', 'RCA', '3.90' , '1982');
+INSERT INTO cdcatalog VALUES (24, 'Picture book', 'Simply Red', 'USA', 'RCA', '4.90' , '1982');
+INSERT INTO cdcatalog VALUES (25, 'Red', 'The Communards', 'USA', 'RCA', '15.90' , '1982');
+INSERT INTO cdcatalog VALUES (26, 'Unchain my heart', 'Joe Cocker', 'USA', 'RCA', '24.90' , '1982');
+commit;

@@ -1,0 +1,364 @@
+<html>
+<head>
+
+
+
+
+<script>
+
+	
+		function ValidateEmail(mail) 
+	{ 
+	if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail))
+	{ return (true) 
+	}
+	//alert("You have entered an invalid email address!") 
+	return (false) 
+	
+	}
+
+function validate(){
+	  var name=document.getElementById('name').value;
+	  var email=document.getElementById('email').value;
+	  var pn=document.getElementById('phone number').value;
+	  var pa=document.getElementById('pa').value;
+      var comments=document.getElementById('comments').value;
+		
+	   if(name== ""){
+	  alert('please enter name');
+	       return false;
+	  }
+	   
+	  if(email== ""){
+	  alert('please enter email');
+	       return false;
+	  }
+	  if(!ValidateEmail(email))
+	  {
+		alert("You have entered an invalid email address!") 
+		return false;
+	  }
+	  if(pn== ""){
+	  alert('please enter phone number');
+	       return false;
+	  }
+			if(pa== ""){
+	  alert('please enter postal address');
+	       return false;
+	  }	 
+				if(comments== ""){
+	  alert('please enter comments');
+	       return false;
+	  }	 
+			
+				return true;
+			 
+	}
+	
+
+
+</script>
+    <meta charset="utf-8">
+    <meta name="robots" content="all,follow">
+    <meta name="googlebot" content="index,follow,snippet,archive">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Universal Your furniture Shop">
+    <meta name="author" content="Ondrej Svestka | ondrejsvestka.cz, modified by Shang Gao Deakin Uni June 2018.">
+    <meta name="keywords" content="">
+
+    <title>
+        Universal : Your Furniture Shop
+    </title>
+
+    <meta name="keywords" content="">
+
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,300,100' rel='stylesheet' type='text/css'>
+
+    <!-- styles -->
+    <link href="css/font-awesome.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/owl.carousel.css" rel="stylesheet">
+    <link href="css/owl.theme.css" rel="stylesheet">
+
+    <!-- theme stylesheet -->
+    <link href="css/style.default.css" rel="stylesheet" id="theme-stylesheet">
+
+    <!-- your stylesheet with modifications -->
+    <link href="css/custom.css" rel="stylesheet">
+
+    <script src="js/respond.min.js"></script>
+
+    <link rel="shortcut icon" href="favicon.png">
+
+<script>
+
+
+</script>
+
+</head>
+
+<body>
+
+    <!-- *** TOPBAR ***
+ _________________________________________________________ -->
+    <div id="top">
+        <div class="container">
+            <div class="col-md-6 offer" data-animate="fadeInDown">
+                <a href="#" class="btn btn-success btn-sm" data-animate-hover="shake">Offer of the day</a>  
+				<a href="#">Get flat 35% off on orders over $500!</a>
+            </div>
+            <div class="col-md-6" data-animate="fadeInDown">
+                <ul class="menu">
+                    <li><a href="#" data-toggle="modal" data-target="#login-modal">Login</a>
+                    </li>
+                    <li><a href="register.html">Register</a>
+                    </li>
+                    <li><a href="contact.html">Contact</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="Login">Customer login</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form action="password.php" method="POST">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="email" id="email-modal" placeholder="email">
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-control" name="pass" id="password-modal" placeholder="password">
+                            </div>
+
+                            <p class="text-center">
+                                <button class="btn btn-primary"><i class="fa fa-sign-in"></i> Log in</button>
+                            </p>
+
+                        </form>
+
+                        <p class="text-center text-muted">Not registered yet?</p>
+                        <p class="text-center text-muted"><a href="register.html">
+						<strong>Register now</strong></a>! It is easy and done in 1&nbsp;minute 
+						and gives you access to special discounts and much more!</p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- *** TOP BAR END *** -->
+
+    <!-- *** NAVBAR ***
+ _________________________________________________________ -->
+
+    <div class="navbar navbar-default yamm" role="navigation" id="navbar">
+        <div class="container">
+            <div class="navbar-header">
+
+                <a class="navbar-brand home" href="index.html" data-animate-hover="bounce">
+                    <img src="img/logo.png" alt="Universal logo" class="hidden-xs">
+                    <img src="img/logo-small.png" alt="Universal logo" class="visible-xs"><span class="sr-only">Universal - go to homepage</span>
+                </a>
+                <div class="navbar-buttons">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation">
+                        <span class="sr-only">Toggle navigation</span>
+                        <i class="fa fa-align-justify"></i>
+                    </button>
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#search">
+                        <span class="sr-only">Toggle search</span>
+                        <i class="fa fa-search"></i>
+                    </button>
+                    <a class="btn btn-default navbar-toggle" href="cart.php">
+                        <i class="fa fa-shopping-cart"></i>  <span class="hidden-xs">items in cart</span>
+                    </a>
+                </div>
+            </div>
+            <!--/.navbar-header -->
+
+            <div class="navbar-collapse collapse" id="navigation">
+
+                <ul class="nav navbar-nav navbar-left">
+                    <li class="active"><a href="index.html">Home</a>
+                    </li>
+														
+					<li class="dropdown yamm-fw">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="200">Shop <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <div class="yamm-content">
+                                    <div class="row">
+                                        <div class="col-sm-6"> <!-- col-sm-3 is changed to col-sm-6 by Shang-->
+                                            <h5>Furniture</h5>
+                                            <ul>
+                                                <li><a href="shop-furniture.html">Chairs</a>
+                                                </li>
+                                                <li><a href="shop-furniture.html">Beds</a>
+                                                </li>												
+                                                <li><a href="shop-furniture.html">Tables</a>
+                                                </li>
+												<li><a href="shop-furniture.html">Storage</a>
+                                                </li>
+												
+                                            </ul>
+                                        </div>                                        
+                                        <div class="col-sm-6"> <!-- col-sm-3 is changed to col-sm-6 by Shang-->
+                                            <h5>Accessories</h5>
+                                            <ul>
+                                                <li><a href="shop-accessories.html">Home Deco</a>
+                                                </li>
+                                                <li><a href="shop-accessories.html">Textiles & Rugs</a>
+                                                </li>
+												<li><a href="shop-accessories.html">Lighting</a>
+                                                </li>
+												<li><a href="shop-accessories.html">Plant pots & Stands</a>
+                                                </li>												
+                                            </ul>
+                                        </div>                                        
+                                    </div>
+                                </div>
+                                <!-- /.yamm-content -->
+                            </li>
+                        </ul>
+                    </li>                   
+
+                    <li class="dropdown yamm-fw">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="200">Site <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <div class="yamm-content">
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <h5>Shop</h5>
+                                            <ul>
+                                                <li><a href="index.html">Homepage</a>
+                                                </li>
+                                                <li><a href="shop-furniture.html">Shop - furniture</a>
+                                                </li>
+												<li><a href="shop-accessories.html">Shop - accessories</a>
+                                                </li> 
+                                            </ul>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <h5>User</h5>
+                                            <ul>
+                                                <li><a href="register.html">Register / login</a>
+                                                </li>
+                                                <li><a href="customer-orders.html">Orders history</a>
+                                                </li>
+                                                <li><a href="customer-order.html">Order history detail</a>
+                                                </li>
+                                                <li><a href="customer-account.html">Customer account / change password</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <h5>Order process</h5>
+                                            <ul>
+                                                <li><a href="cart.php">Shopping cart</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <h5>Information</h5>
+                                            <ul>                                                
+                                                <li><a href="aboutus.html">About us</a>
+                                                </li>
+												<li><a href="terms.html">Terms and conditions</a>
+                                                </li>
+												<li><a href="faq.html">FAQ</a>
+                                                </li>                                                                                                
+                                                <li><a href="contact.html">Contact</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.yamm-content -->
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+            </div>
+            <!--/.nav-collapse -->
+
+            <div class="navbar-buttons">
+
+                <div class="navbar-collapse collapse right" id="basket-overview">
+                    <a href="cart.php" class="btn btn-primary navbar-btn"><i class="fa fa-shopping-cart"></i><span class="hidden-sm">items in cart</span></a>
+                </div>
+                <!--/.nav-collapse -->
+
+                <div class="navbar-collapse collapse right" id="search-not-mobile">
+                    <button type="button" class="btn navbar-btn btn-primary" data-toggle="collapse" data-target="#search">
+                        <span class="sr-only">Toggle search</span>
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="collapse clearfix" id="search">
+
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                       <input type="text" class="form-control" placeholder="Search" onkeyup="showResult(this.value)">
+                        <span class="input-group-btn">
+
+			<button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+
+		    </span>
+				<div id="livesearch"></div>
+                    </div>
+                </form>
+
+            </div>
+            <!--/.nav-collapse -->
+
+        </div>
+        <!-- /.container -->
+    </div>
+
+
+
+
+  <form onsubmit='return validate()' action="captcha.php" method="post">
+	
+	Name:<input type ='text' id ='name' name='name'>
+	<br><br>
+	Email:<input type ='text' id ='email' name ='email'>
+	<br><br>
+	Phone number:<input type ='number' id ='phone number' name ='pn'>
+	<br><br>
+	Postal address:<input type ='text' id ='pa' name ='postal address'>
+	<br><br>
+	
+	
+	<br><br>
+	<div>
+	Comments:
+	</div>
+	<textarea id="comments" name="comments" placeholder='Enter comments here!'  rows='5' cols='30'></textarea>
+	<br><br>     
+	   <button type='submit'>Submit</button>
+	  </form>
+	</body>
+	<meta charset='utf-8'>
+
+	
+	<?
+	
+
+echo $_POST['comments'];
+echo htmlentities($_POST['comments']);
+	?>
+</html>

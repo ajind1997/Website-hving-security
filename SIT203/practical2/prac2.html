@@ -1,0 +1,69 @@
+<html>
+    <script>
+function validate(){
+  var name=document.getElementById("name")
+  var pn=document.getElementById("phone number")
+  var area_code =document.getElementyById("area code")
+  if (name==""){
+  alert('please type the name');
+  return false;
+  }
+
+  var i =0
+  for (i=0;i<11;i++)
+  {
+      if (i=0)
+      {
+          continue;
+        
+      }
+     age= document.write("the number is" + i);
+      document.write("br/>");
+
+      var array =[1,2,3,4,5,6,7,8,9,10];
+      var number ="";
+      var i;
+      for (i =0; i < arrays.length;i++){
+          number += arrays[i] + "<br>";
+      }
+      document.getElementById ("array").innerHTML =text;
+
+    var x =5 ;
+    var y= 7;
+
+    document.getElementById("aa").innerHTML =
+    (x < 5 && y > 7);
+  }
+}
+
+    </script>
+    <form onsubmit ='return validate()'method ="get"></form>
+    Name:<input type ='text' id ='name' name ='name'>
+    Phone number:<input type ='number' id ='phone number' name ='pn'>
+    Age: <input type= 'number' id ='age' name ='age'>
+    array:<input ='number' id ='array' name='array'>
+    aa:<input ='text' id ="aa" name ="aa">
+    <table border =2>
+        <tr>
+            <th>Phone number</th>
+            <td> <input type ='number' id ='phone number' name ='pn'</td>
+        </tr>
+        <tr></tr>
+
+            <th> Area_code:</th>
+            <td> <input type ='number' id = 'area code' name = area_code</td>
+            
+        </tr>
+       
+        <tr>
+            <th> Number:</th>
+            <tr> <input type ='number' id ='number' name ='number'></tr>
+        </tr>
+
+    </table>
+
+    <button type ='submit'>submit</button>
+
+   </form>
+
+</html>
